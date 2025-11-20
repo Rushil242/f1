@@ -1,0 +1,57 @@
+# F1 Pit Stop Optimization Configuration - FIXED VERSION
+
+# Data Collection Settings
+data_collection:
+  years: [2024]  # Season to collect
+  # Specify exact races that have data available
+  # For 2024: races 1-13 are available (as of your output)
+  races: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]  # Only completed races
+  cache_enabled: true
+  
+# Data Paths
+paths:
+  raw_data: "data/raw"
+  processed_data: "data/processed"
+  models: "data/models"
+  visualizations: "output/visualizations"
+
+# Feature Engineering
+features:
+  tire_compounds: ["SOFT", "MEDIUM", "HARD", "INTERMEDIATE", "WET"]
+  lookback_laps: 5  # Laps to consider for degradation calculation
+  weather_features: true
+  
+# Model Training
+models:
+  test_size: 0.2
+  random_state: 42
+  cv_folds: 5
+  
+  random_forest:
+    n_estimators: 100
+    max_depth: 20
+    min_samples_split: 5
+    
+  xgboost:
+    n_estimators: 100
+    max_depth: 6
+    learning_rate: 0.1
+    subsample: 0.8
+    
+  gradient_boosting:
+    n_estimators: 100
+    max_depth: 5
+    learning_rate: 0.1
+
+# Optimization Strategy
+optimization:
+  simulation_strategies: 50  # Number of strategies to simulate
+  max_pit_stops: 3
+  min_stint_length: 5  # Minimum laps per stint
+  pit_time_loss: 25.0  # Average pit stop time loss in seconds
+  
+# Visualization
+visualization:
+  figure_size: [12, 8]
+  dpi: 100
+  style: "seaborn-v0_8-darkgrid"
