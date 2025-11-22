@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 1. Define the Variables */
+:root {
+  /* LIGHT MODE (Engineering Report Style) */
+  --mission-bg: #f3f4f6;       /* Light Gray */
+  --mission-card: #ffffff;     /* White */
+  --mission-text: #111827;     /* Dark Gray Text */
+  --mission-border: #e5e7eb;   /* Light Border */
+}
+
+.dark {
+  /* DARK MODE (Mission Control Style) */
+  --mission-bg: #0b0d10;       /* Deep Space Black */
+  --mission-card: #151921;     /* Panel Gray */
+  --mission-text: #ffffff;     /* White Text */
+  --mission-border: #374151;   /* Dark Border */
+}
+
+/* 2. Apply defaults */
+body {
+  background-color: var(--mission-bg);
+  color: var(--mission-text);
+  font-family: 'Inter', sans-serif;
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--mission-bg); }
+::-webkit-scrollbar-thumb { background: #555; border-radius: 4px; }
