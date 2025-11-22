@@ -1,0 +1,27 @@
+
+╔══════════════════════════════════════════════════════════════╗
+║          F1 PIT STOP STRATEGY OPTIMIZATION REPORT           ║
+╚══════════════════════════════════════════════════════════════╝
+
+OPTIMAL STRATEGY
+─────────────────────────────────────────────────────────────
+Total Race Time:     1406.79 seconds
+Number of Pit Stops: 1
+Pit Laps:            17
+Tire Sequence:       HARD → MEDIUM
+
+STINT BREAKDOWN
+─────────────────────────────────────────────────────────────
+Stint 1: Laps 1-17 (17 laps) on HARD tires
+
+ALTERNATIVE STRATEGIES
+─────────────────────────────────────────────────────────────
+Top 5 Alternative Strategies:
+
+1. Time: 1406.79s (+0.00s) | 1 stops | HARD → MEDIUM
+2. Time: 1738.60s (+331.81s) | 1 stops | SOFT → MEDIUM
+3. Time: 1738.60s (+331.81s) | 1 stops | HARD → MEDIUM
+4. Time: 1758.10s (+351.31s) | 2 stops | HARD → SOFT → HARD
+5. Time: 1921.80s (+515.01s) | 2 stops | MEDIUM → SOFT → MEDIUM
+
+=================================================================
