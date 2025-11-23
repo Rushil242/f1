@@ -11,33 +11,32 @@ class RaceEngineerAgent:
             return
             
         genai.configure(api_key=api_key)
-        # Using 'gemini-1.5-flash' for speed (Race engineers need to be fast)
-        self.model = genai.GenerativeModel('gemini-1.5-flash')
+        # Use the STABLE model. 2.0 is experimental/preview and often causes errors.
+        self.model = genai.GenerativeModel('gemini-2.0-flash')
         
-        # Ensure audio output directory exists
-        if not os.path.exists('backend/audio_cache'):
-            os.makedirs('backend/audio_cache')
+        # --- FIX: USE ABSOLUTE PATHS ---
+        # Get the directory where this script (voice_agent.py) lives
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        # Create audio_cache folder right next to this script
+        self.audio_dir = os.path.join(base_dir, 'audio_cache')
+        
+        if not os.path.exists(self.audio_dir):
+            os.makedirs(self.audio_dir)
+            print(f"📁 Created audio cache at: {self.audio_dir}")
 
     def analyze_and_speak(self, context_data):
-        """
-        1. Takes complex JSON data.
-        2. Uses Gemini to write a short radio script.
-        3. Converts script to Audio.
-        """
         if not self.model:
             return {"error": "No API Key"}, None
 
-        # A. THE BRAIN (Gemini)
+        # A. Generate Script
         script = self._generate_script(context_data)
         
-        # B. THE VOICE (TTS)
+        # B. Generate Audio
         audio_path = self._generate_audio(script)
         
         return script, audio_path
 
     def _generate_script(self, data):
-        """Uses Gemini to act as a Race Engineer"""
-        
         system_prompt = """
         You are an elite F1 Race Engineer (like GP or Bono). 
         Your driver is currently racing. 
@@ -47,37 +46,34 @@ class RaceEngineerAgent:
         1. Be concise, calm, and authoritative. (Max 2 sentences).
         2. If 'tire_health_status' is CRITICAL, command a "Box Box".
         3. Use F1 terminology (Delta, Deg, Box, Push, Lift and Coast).
-        4. Do NOT explain the math, just give the strategic instruction.
         """
         
         user_message = f"""
-        Here is the live telemetry:
+        Telemetry:
         - Driver: {data.get('driver', 'Unknown')}
-        - Predicted Next Lap: {data.get('predicted_next_lap', 'N/A')}s
-        - Pace Drop: {data.get('pace_drop_predicted', 0)}s
+        - Predicted Next Lap: {data.get('predicted_next_lap', 'N/A')}
+        - Pace Drop: {data.get('pace_drop_predicted', 0)}
         - Tire Health: {data.get('tire_health_status', 'Unknown')}
-        - Track Dominance: {data.get('dominance_summary', 'N/A')}
         """
         
         try:
+            # Generate content
             response = self.model.generate_content([system_prompt, user_message])
             return response.text
         except Exception as e:
+            print(f"🔴 Gemini API Error: {e}")
             return "Radio check. Systems offline."
 
     def _generate_audio(self, text):
-        """Converts text to MP3"""
         try:
-            # We use a timestamp to avoid browser caching issues with the audio file
             filename = f"radio_{int(time.time())}.mp3"
-            filepath = os.path.join('backend/audio_cache', filename)
+            # Save to the absolute path we calculated in __init__
+            filepath = os.path.join(self.audio_dir, filename)
             
-            # gTTS (Google Text-to-Speech)
-            # lang='en' (English), tld='co.uk' gives it a British accent (Classic F1 style)
             tts = gTTS(text=text, lang='en', tld='co.uk', slow=False)
             tts.save(filepath)
-            
+            print(f"🔊 Audio saved to: {filepath}")
             return filepath
         except Exception as e:
-            print(f"TTS Error: {e}")
+            print(f"🔴 TTS Error: {e}")
             return None

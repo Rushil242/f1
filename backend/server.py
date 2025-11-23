@@ -4,6 +4,10 @@ from analysis_engine import RaceAnalytics
 from flask import send_file # Add this import
 from voice_agent import RaceEngineerAgent # Import the new class
 import os
+from dotenv import load_dotenv 
+
+load_dotenv()  # Load environment variables from .env file
+
 
 app = Flask(__name__)
 CORS(app) # Allow React to make requests
@@ -43,7 +47,9 @@ def get_cliff():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-GEMINI_API_KEY = "AIzaSyDs0QaB3WkzRUq8aD1iBr3DE8EkR1ulBHM" 
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY') 
+if not GEMINI_API_KEY:
+    raise RuntimeError("GEMINI_API_KEY not set. Export it (export GEMINI_API_KEY=...) or add it to a .env file.")
 
 engine = RaceAnalytics(2023, 'Bahrain', 'R')
 voice_agent = RaceEngineerAgent(GEMINI_API_KEY)
