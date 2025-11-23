@@ -37,32 +37,42 @@ class RaceEngineerAgent:
         return script, audio_path
 
     def _generate_script(self, data):
-        system_prompt = """
-        You are an elite F1 Race Engineer (like GP or Bono). 
-        Your driver is currently racing. 
-        I will give you telemetry data. You must respond with a RADIO MESSAGE.
+        """
+        UPGRADE: Generates a 45-60 second 'Strategic Briefing' 
+        instead of a short burst.
+        """
         
-        Rules:
-        1. Be concise, calm, and authoritative. (Max 2 sentences).
-        2. If 'tire_health_status' is CRITICAL, command a "Box Box".
-        3. Use F1 terminology (Delta, Deg, Box, Push, Lift and Coast).
+        system_prompt = """
+        You are 'GP', the Race Engineer for Max Verstappen. 
+        This is a STRATEGIC BRIEFING during a quiet moment in the race.
+        
+        Your goal is to speak for about 45-60 seconds. 
+        Structure your response into these 4 distinct sections:
+        
+        1. **Current Status**: Summarize the current lap, tire age, and immediate pace.
+        2. **Tire Analysis**: deeply analyze the tire degradation (health status). Explain if we are seeing graining or thermal deg.
+        3. **The Threat**: Analyze the rival (Leclerc). Is he catching? What are his sector times doing?
+        4. **The Decision**: Give the final recommendation (Extend stint, Box now, or Switch Plans).
+        
+        Tone: Professional, calm, highly technical, but conversational. 
+        Use fillers like "Okay Max," "Looking at the data," "Copy that."
         """
         
         user_message = f"""
-        Telemetry:
+        Detailed Telemetry Report:
         - Driver: {data.get('driver', 'Unknown')}
-        - Predicted Next Lap: {data.get('predicted_next_lap', 'N/A')}
-        - Pace Drop: {data.get('pace_drop_predicted', 0)}
-        - Tire Health: {data.get('tire_health_status', 'Unknown')}
+        - Current Prediction: {data.get('predicted_next_lap', 'N/A')}s
+        - Pace Delta: {data.get('pace_drop_predicted', 0)}s vs target.
+        - Tire Model Status: {data.get('tire_health_status', 'Unknown')}
+        - Sector Analysis: {data.get('dominance_summary', 'N/A')}
         """
         
         try:
-            # Generate content
             response = self.model.generate_content([system_prompt, user_message])
             return response.text
         except Exception as e:
             print(f"🔴 Gemini API Error: {e}")
-            return "Radio check. Systems offline."
+            return "Telemetry link unstable. Stand by."
 
     def _generate_audio(self, text):
         try:

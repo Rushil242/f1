@@ -81,5 +81,32 @@ def race_engineer_radio():
     else:
         return jsonify({"error": "Radio failed", "script": script_text}), 500
 
+
+@app.route('/api/strategy/projection', methods=['GET'])
+def get_strategy_projection():
+    driver = request.args.get('driver', 'VER')
+    data = engine.get_strategy_projection(driver)
+    return jsonify(data)
+
+
+
+@app.route('/api/historical', methods=['GET'])
+def get_historical():
+    driver = request.args.get('driver', 'VER')
+    data = engine.get_historical_data(driver)
+    return jsonify(data)
+
+@app.route('/api/strategy/calculate', methods=['POST'])
+def calculate_strategy_endpoint():
+    data = request.json
+    # Expects: { "driver": "VER", "current_lap": 25, "tire_age": 12, "compound": "MEDIUM" }
+    results = engine.calculate_strategy(
+        data['driver'], 
+        int(data['current_lap']), 
+        int(data['tire_age']), 
+        data['compound']
+    )
+    return jsonify(results)
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

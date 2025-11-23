@@ -2,32 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 1. Define the Variables */
 :root {
-  /* LIGHT MODE (Engineering Report Style) */
-  --mission-bg: #f3f4f6;       /* Light Gray */
-  --mission-card: #ffffff;     /* White */
-  --mission-text: #111827;     /* Dark Gray Text */
-  --mission-border: #e5e7eb;   /* Light Border */
+  --bg-color: #050505;
+  --card-bg: rgba(20, 20, 25, 0.7);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --primary: #FF1801;
+  --accent: #00D2BE;
 }
 
-.dark {
-  /* DARK MODE (Mission Control Style) */
-  --mission-bg: #0b0d10;       /* Deep Space Black */
-  --mission-card: #151921;     /* Panel Gray */
-  --mission-text: #ffffff;     /* White Text */
-  --mission-border: #374151;   /* Dark Border */
-}
-
-/* 2. Apply defaults */
 body {
-  background-color: var(--mission-bg);
-  color: var(--mission-text);
+  background-color: var(--bg-color);
+  color: #ffffff;
   font-family: 'Inter', sans-serif;
-  transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+  /* subtle grid background */
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  overflow-x: hidden;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: var(--mission-bg); }
-::-webkit-scrollbar-thumb { background: #555; border-radius: 4px; }
+/* Glassmorphism Card Class */
+.glass-panel {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Neon Text Glow */
+.neon-text {
+  text-shadow: 0 0 10px rgba(255, 24, 1, 0.6);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
