@@ -131,7 +131,6 @@ cd f1
 
 The system follows a decoupled **Microservices** pattern:
 
-```mermaid
 graph LR
     A[FastF1 API] --> B(Python Backend / Flask)
     B --> C{AI Engine}
