@@ -108,5 +108,20 @@ def calculate_strategy_endpoint():
     )
     return jsonify(results)
 
+
+@app.route('/api/performance/radar', methods=['GET'])
+def get_radar():
+    d1 = request.args.get('d1', 'VER')
+    d2 = request.args.get('d2', 'LEC')
+    data = engine.analyze_performance_dna(d1, d2)
+    return jsonify(data)
+
+@app.route('/api/battle/forecast', methods=['GET'])
+def get_forecast():
+    d1 = request.args.get('d1', 'VER')
+    d2 = request.args.get('d2', 'LEC')
+    data = engine.predict_gap_evolution(d1, d2)
+    return jsonify(data)
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
